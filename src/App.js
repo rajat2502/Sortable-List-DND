@@ -8,25 +8,6 @@ let draggedItem;
 const App = () => {
   const [skills, setskills] = useState([]);
 
-  useEffect(() => {
-    fetch(
-      "https://api.stackexchange.com/2.2/tags?order=desc&sort=popular&site=stackoverflow"
-    )
-      .then(res => res.json())
-      .then(res => {
-        let items = res.items.map(item => item.name);
-        setskills(items.slice(0, 10));
-      })
-      .catch(err => console.log(err));
-  }, []);
-
-  useEffect(
-    () => {
-      // save to firebase
-    },
-    [skills]
-  );
-
   const onDragStart = (e, index) => {
     draggedItem = skills[index];
     e.dataTransfer.effectAllowed = "move";
@@ -53,6 +34,18 @@ const App = () => {
     setskills(arr);
     removeItem(-1);
   };
+
+  useEffect(() => {
+    fetch(
+      "https://api.stackexchange.com/2.2/tags?order=desc&sort=popular&site=stackoverflow"
+    )
+      .then(res => res.json())
+      .then(res => {
+        let items = res.items.map(item => item.name);
+        setskills(items.slice(0, 10));
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   return (
     <div className="main">
